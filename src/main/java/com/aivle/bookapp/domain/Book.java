@@ -1,9 +1,6 @@
 package com.aivle.bookapp.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,17 +11,22 @@ import lombok.Setter;
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @Entity
 public class Book {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @Column(nullable=false) // DB 제약
+    @NotBlank               // Bean Validation
     private String title;
 
-    @NotBlank
+    @Column(nullable=false) // DB 제약
+    @NotBlank               // Bean Validation
     private String author;
 
-    @NotBlank
+    @Column(nullable=false) // DB 제약
+    @NotBlank               // Bean Validation
+    @Lob                    // 방대한 텍스트 저장 명시
     private String content;
 
     private String coverImageUrl;
