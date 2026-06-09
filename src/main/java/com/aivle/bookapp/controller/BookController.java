@@ -49,12 +49,7 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved); // 지금의 응답엔터티에 어떤 상태를 담을건지, // HTTP 응답 코드를 위해 존재
     }
 
-    // 제목, 저자 통합 검색
-    @GetMapping("/books/search/detail")
-    public List<Book> searchByTitleAndAuthor(@RequestParam String title, @RequestParam String author) {
-        return bookService.searchBooks(title, author);
-    }
-
+    // 카테고리, 제목, 저자, 키워드 검색
     @GetMapping("/books/search")
     public List<Book> searchFilter(
             @RequestParam(required = false) String category,
