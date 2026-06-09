@@ -49,30 +49,6 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved); // 지금의 응답엔터티에 어떤 상태를 담을건지, // HTTP 응답 코드를 위해 존재
     }
 
-    // 카테고리 필터
-    @GetMapping("/books/search/category")
-    public List<Book> getBookByCategory(@RequestParam String category) {
-        return bookService.getBooksByCategory(category);
-    }
-
-    // 제목 검색
-    @GetMapping("/books/search/title")
-    public List<Book> searchByTitle(@RequestParam String title) {
-        return bookService.searchByTitle(title);
-    }
-
-    // 저자 검색
-    @GetMapping("/books/search/author")
-    public List<Book> searchByAuthor(@RequestParam String author) {
-        return bookService.searchByAuthor(author);
-    }
-
-    // 키워드로 검색
-    @GetMapping("/books/search")
-    public List<Book> searchByKeyword(@RequestParam String keyword) {
-        return bookService.searchByKeyword(keyword);
-    }
-
     // 제목, 저자 통합 검색
     @GetMapping("/books/search/detail")
     public List<Book> searchByTitleAndAuthor(@RequestParam String title, @RequestParam String author) {
