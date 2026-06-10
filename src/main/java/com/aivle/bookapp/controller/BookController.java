@@ -53,10 +53,9 @@ public class BookController {
     @GetMapping("/books/search")
     public List<Book> searchFilter(
             @RequestParam(required = false) String category,
-            @RequestParam(required = false) String title,
-            @RequestParam(required = false) String author,
+            @RequestParam(required = false) String searchType,
             @RequestParam(required = false) String keyword
     ) {
-        return bookService.searchBooksFilter(category, title, author, keyword);
+        return bookService.searchBooksFilter(category, searchType, keyword);
     }
 }
