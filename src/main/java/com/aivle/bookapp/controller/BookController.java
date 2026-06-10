@@ -16,12 +16,6 @@ public class BookController {
 
     private final BookService bookService;
 
-    // 전체 도서 목록
-    @GetMapping("/books")
-    public List<Book> getAll() {
-        return bookService.getAllBooks();
-    }
-
     // 도서 단건 조회, 상세 정보
     @GetMapping("/books/{id}")
     public Book getBook(@PathVariable Long id) {
