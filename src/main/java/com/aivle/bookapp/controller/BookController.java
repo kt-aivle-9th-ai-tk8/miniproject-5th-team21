@@ -50,7 +50,7 @@ public class BookController {
     }
 
     // 카테고리, 제목, 저자, 키워드 검색
-    @GetMapping("/books/search")
+    @GetMapping("/books")
     public List<Book> searchFilter(
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String searchType,
