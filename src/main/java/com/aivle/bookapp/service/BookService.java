@@ -24,28 +24,22 @@ public class BookService {
     }
 
     @Transactional
-    public Book updateBook(Long id, Book book){
-        Book existing = getBookById(id);
-
-        if (book.getTitle() != null) {
-            existing.setTitle(book.getTitle());
-        }
-        if (book.getAuthor() != null) {
-            existing.setAuthor(book.getAuthor());
-        }
-        if (book.getContent() != null) {
-            existing.setContent(book.getContent());
-        }
-        if (book.getCategory() != null) {
-            existing.setCategory(book.getCategory());
-        }
-
-        return bookRepository.save(existing);
+    public Book createBook(Book book){
+        return bookRepository.save(book);
     }
 
     @Transactional
-    public Book createBook(Book book){
-        return bookRepository.save(book);
+    public Book updateBook(Long id, Book book){
+        Book existing = getBookById(id);
+
+        existing.setTitle(book.getTitle());
+        existing.setAuthor(book.getAuthor());
+        existing.setContent(book.getContent());
+        existing.setCategory(book.getCategory());
+        existing.setCoverImageUrl(book.getCoverImageUrl());
+        existing.setUpdatedAt(book.getUpdatedAt());
+
+        return bookRepository.save(existing);
     }
 
     @Transactional
@@ -58,27 +52,43 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
-    public List<Book> searchBooksFilter(String category, String searchType, String keyword){
-        // 1. 카테고리 필터링만 있고 검색어가 없는 경우
-        if ((category != null && !category.isEmpty()) && (keyword == null || keyword.isEmpty())) {
-            return bookRepository.findByCategory(category);
+    public List<Book> searchBooksFilter(String category, String keyword, String searchType) {
+
+        String cleanCategory   = (category != null && !category.trim().isEmpty()) ? category.trim() : null;
+        String cleanKeyword    = (keyword != null && !keyword.trim().isEmpty()) ? keyword.trim() : null;
+        String cleanSearchType = (searchType != null && !searchType.trim().isEmpty()) ? searchType.trim().toLowerCase() : "total";
+
+        // 1. 카테고리만 있는 경우
+        if (cleanCategory != null && cleanKeyword == null) {
+            return bookRepository.findByCategory(cleanCategory);
         }
 
-        // 2. 검색 유형(searchType)에 따른 분기 처리
-        if (searchType != null && keyword != null && !keyword.isEmpty()) {
-            switch (searchType.toLowerCase()) {
+        // 2. 카테고리 + 검색어
+        if (cleanCategory != null) {
+            switch (cleanSearchType) {
                 case "title":
-                    return bookRepository.findByTitleContaining(keyword); // 제목 검색
+                    return bookRepository.findByCategoryAndTitleContaining(cleanCategory, cleanKeyword);
                 case "author":
-                    return bookRepository.findByAuthorContaining(keyword); // 저자 검색
+                    return bookRepository.findByCategoryAndAuthorContaining(cleanCategory, cleanKeyword);
                 case "total":
                 default:
-                    // 제목 + 저자 통합 검색
-                    return bookRepository.findByTitleContainingOrAuthorContaining(keyword, keyword);
+                    return bookRepository.findByCategoryAndSearchKeyword(cleanCategory, cleanKeyword);
             }
         }
 
-        // 3. 조건이 없다면 전체 목록 반환
+        // 3. 검색어만 있는 경우
+        if (cleanKeyword != null) {
+            switch (cleanSearchType) {
+                case "title":
+                    return bookRepository.findByTitleContaining(cleanKeyword);
+                case "author":
+                    return bookRepository.findByAuthorContaining(cleanKeyword);
+                default:
+                    return bookRepository.findBySearchKeyword(cleanKeyword);
+            }
+        }
+
+        // 4. 카테고리없고, 검색어도 없는 경우 -> 전체조회
         return bookRepository.findAll();
     }
 
