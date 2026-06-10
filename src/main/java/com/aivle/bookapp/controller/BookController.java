@@ -36,7 +36,7 @@ public class BookController {
     }
 
     // 도서 수정
-    @PatchMapping("/books/{id}")
+    @PutMapping("/books/{id}")
     public Book updateBook(@PathVariable Long id, @RequestBody Book book) {
         return bookService.updateBook(id, book);
     }
