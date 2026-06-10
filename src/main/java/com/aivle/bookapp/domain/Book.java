@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 @Getter
 @Setter
@@ -16,17 +17,20 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable=false) // DB 제약
+    @Column(nullable=false, length=50) // DB 제약 (DB DDL)
     @NotBlank               // Bean Validation
+    @Length(max=50)         // Bean Validation
     private String title;
 
-    @Column(nullable=false) // DB 제약
+    @Column(nullable=false, length=30) // DB 제약 (DB DDL)
     @NotBlank               // Bean Validation
+    @Length(max=30)         // Bean Validation
     private String author;
 
-    @Column(nullable=false) // DB 제약
+    @Column(nullable=false, length=500) // DB 제약 (DB DDL)
+    @Lob                    // 방대한 텍스트 저장 명시 (DB DDL)
     @NotBlank               // Bean Validation
-    @Lob                    // 방대한 텍스트 저장 명시
+    @Length(max=500)        // Bean Validation
     private String content;
 
     private String coverImageUrl;
