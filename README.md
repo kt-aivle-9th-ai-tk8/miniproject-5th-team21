@@ -11,14 +11,15 @@
 # 📊 데이터 모델 정의
 
 | 필드명             | 데이터 타입 | 설명                  |
-| --------------- | ------ | ------------------- |
-| `id`            | int    | 고유 식별자              |
-| `title`         | string | 도서 제목               |
-| `author`        | string | 도서 저자               |
-| `content`       | string | 도서 소개 및 본문          |
-| `coverImageUrl` | string | Base64 이미지 Data URL |
-| `createdAt`     | string | 생성 시각 (ISO 8601)    |
-| `updatedAt`     | string | 수정 시각 (ISO 8601)    |
+|-----------------|--------|---------------------|
+| [PK] `id`       | Long   | 고유 식별자              |
+| `title`         | String | 도서 제목               |
+| `author`        | String | 도서 저자               |
+| `category`      | String | 도서 분류               |
+| `content`       | String | 도서 소개 및 본문          |
+| `coverImageUrl` | String | Base64 이미지 Data URL |
+| `createdAt`     | String | 생성 시각 (ISO 8601)    |
+| `updatedAt`     | String | 수정 시각 (ISO 8601)    |
 
 ---
 
