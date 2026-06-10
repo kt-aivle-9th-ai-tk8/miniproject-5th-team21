@@ -33,6 +33,7 @@ public class Book {
     @Length(max=500)        // Bean Validation
     private String content;
 
+    @Lob                    // 방대한 텍스트 저장 명시 (DB DDL)
     private String coverImageUrl;
 
     private String category;
