@@ -93,4 +93,12 @@ public class BookService {
         return bookRepository.findAll();
     }
 
+    @Transactional
+    public Book updateCoverImageUrl(Long id, String coverImageUrl){
+        Book book = getBookById(id);
+        book.setCoverImageUrl(coverImageUrl);
+
+        return book;
+    }
+
 }
