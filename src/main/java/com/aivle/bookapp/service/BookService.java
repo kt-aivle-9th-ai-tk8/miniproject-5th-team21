@@ -1,6 +1,9 @@
 package com.aivle.bookapp.service;
 
 import com.aivle.bookapp.domain.Book;
+import com.aivle.bookapp.dto.BookDto;
+import com.aivle.bookapp.dto.CreateBookCommand;
+import com.aivle.bookapp.dto.UpdateBookCommand;
 import com.aivle.bookapp.dto.UpdateBookCoverImageUrlCommand;
 import com.aivle.bookapp.exception.BookNotFoundException;
 import com.aivle.bookapp.repository.BookRepository;
@@ -9,39 +12,45 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class BookService {
     private final BookRepository bookRepository;
 
-    @Transactional(readOnly = true)
-    public List<Book> getAllBooks(){
-        return bookRepository.findAll();
+    // Service 내부에서 호출하는 용도
+    private Book getRawBookById(Long id){
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException(id));
     }
 
     @Transactional(readOnly = true)
-    public Book getBookById(Long id){
-        return bookRepository.findById(id).orElseThrow(()->new BookNotFoundException(id));
+    public BookDto getBookById(Long id){
+        return BookDto.from(getRawBookById(id));
     }
 
     @Transactional
-    public Book createBook(Book book){
-        return bookRepository.save(book);
+    public BookDto createBook(CreateBookCommand command){
+        return BookDto.from(
+                bookRepository.save(command.toBook())
+        );
     }
 
     @Transactional
-    public Book updateBook(Long id, Book book){
-        Book existing = getBookById(id);
+    public BookDto updateBook(Long id, UpdateBookCommand command){
+        Book existing = getRawBookById(id);
 
-        existing.setTitle(book.getTitle());
-        existing.setAuthor(book.getAuthor());
-        existing.setContent(book.getContent());
-        existing.setCategory(book.getCategory());
-        existing.setCoverImageUrl(book.getCoverImageUrl());
-        existing.setUpdatedAt(book.getUpdatedAt());
+        existing.setTitle(command.title());
+        existing.setAuthor(command.author());
+        existing.setContent(command.content());
+        existing.setCategory(command.category());
+        existing.setCoverImageUrl(command.coverImageUrl());
+        existing.setUpdatedAt(command.updatedAt());
 
-        return bookRepository.save(existing);
+        return BookDto.from(
+                bookRepository.save(existing)
+        );
     }
 
     @Transactional
@@ -54,7 +63,7 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
-    public List<Book> searchBooksFilter(String category, String keyword, String searchType) {
+    public List<BookDto> searchBooksFilter(String category, String searchType, String keyword) {
 
         String cleanCategory   = (category != null && !category.trim().isEmpty()) ? category.trim() : null;
         String cleanKeyword    = (keyword != null && !keyword.trim().isEmpty()) ? keyword.trim() : null;
@@ -62,19 +71,30 @@ public class BookService {
 
         // 1. 카테고리만 있는 경우
         if (cleanCategory != null && cleanKeyword == null) {
-            return bookRepository.findByCategory(cleanCategory);
+            return bookRepository.findByCategory(cleanCategory)
+                    .stream()
+                    .map(BookDto::from)
+                    .collect(Collectors.toList());
         }
 
         // 2. 카테고리 + 검색어
         if (cleanCategory != null) {
             switch (cleanSearchType) {
                 case "title":
-                    return bookRepository.findByCategoryAndTitleContaining(cleanCategory, cleanKeyword);
+                    return bookRepository.findByCategoryAndTitleContaining(cleanCategory, cleanKeyword)
+                            .stream()
+                            .map(BookDto::from)
+                            .collect(Collectors.toList());
                 case "author":
-                    return bookRepository.findByCategoryAndAuthorContaining(cleanCategory, cleanKeyword);
-                case "total":
+                    return bookRepository.findByCategoryAndAuthorContaining(cleanCategory, cleanKeyword)
+                            .stream()
+                            .map(BookDto::from)
+                            .collect(Collectors.toList());
                 default:
-                    return bookRepository.findByCategoryAndSearchKeyword(cleanCategory, cleanKeyword);
+                    return bookRepository.findByCategoryAndSearchKeyword(cleanCategory, cleanKeyword)
+                            .stream()
+                            .map(BookDto::from)
+                            .collect(Collectors.toList());
             }
         }
 
@@ -82,24 +102,38 @@ public class BookService {
         if (cleanKeyword != null) {
             switch (cleanSearchType) {
                 case "title":
-                    return bookRepository.findByTitleContaining(cleanKeyword);
+                    return bookRepository.findByTitleContaining(cleanKeyword)
+                            .stream()
+                            .map(BookDto::from)
+                            .collect(Collectors.toList());
                 case "author":
-                    return bookRepository.findByAuthorContaining(cleanKeyword);
+                    return bookRepository.findByAuthorContaining(cleanKeyword)
+                            .stream()
+                            .map(BookDto::from)
+                            .collect(Collectors.toList());
                 default:
-                    return bookRepository.findBySearchKeyword(cleanKeyword);
+                    return bookRepository.findBySearchKeyword(cleanKeyword)
+                            .stream()
+                            .map(BookDto::from)
+                            .collect(Collectors.toList());
             }
         }
 
         // 4. 카테고리없고, 검색어도 없는 경우 -> 전체조회
-        return bookRepository.findAll();
+        return bookRepository.findAll()
+                .stream()
+                .map(BookDto::from)
+                .collect(Collectors.toList());
     }
 
     @Transactional
-    public Book updateCoverImageUrl(Long id, UpdateBookCoverImageUrlCommand command){
-        Book book = getBookById(id);
+    public BookDto updateCoverImageUrl(Long id, UpdateBookCoverImageUrlCommand command){
+        Book book = getRawBookById(id);
         book.setCoverImageUrl(command.coverImageUrl());
 
-        return bookRepository.save(book);
+        return BookDto.from(
+                bookRepository.save(book)
+        );
     }
 
 }
