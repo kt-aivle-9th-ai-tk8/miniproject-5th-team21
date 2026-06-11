@@ -4,7 +4,6 @@ import com.aivle.bookapp.domain.Book;
 import com.aivle.bookapp.dto.BookDto;
 import com.aivle.bookapp.dto.CreateBookCommand;
 import com.aivle.bookapp.dto.UpdateBookCommand;
-import com.aivle.bookapp.dto.UpdateBookCoverImageUrlCommand;
 import com.aivle.bookapp.exception.BookNotFoundException;
 import com.aivle.bookapp.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
@@ -127,7 +126,7 @@ public class BookService {
     }
 
     @Transactional
-    public BookDto updateCoverImageUrl(Long id, UpdateBookCoverImageUrlCommand command){
+    public BookDto updateCoverImageUrl(Long id, UpdateBookCommand command){
         Book book = getRawBookById(id);
         book.setCoverImageUrl(command.coverImageUrl());
 
