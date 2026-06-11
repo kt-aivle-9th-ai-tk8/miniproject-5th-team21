@@ -19,14 +19,7 @@ import java.util.stream.Collectors;
 public class BookService {
     private final BookRepository bookRepository;
 
-    @Transactional(readOnly = true)
-    public List<BookDto> getAllBooks(){
-        return bookRepository.findAll()
-                .stream()
-                .map(BookDto::from)
-                .collect(Collectors.toList());
-    }
-
+    // Service 내부에서 호출하는 용도
     @Transactional(readOnly = true)
     protected Book getRawBookById(Long id){
         return bookRepository.findById(id)
