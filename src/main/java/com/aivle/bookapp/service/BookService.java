@@ -1,6 +1,7 @@
 package com.aivle.bookapp.service;
 
 import com.aivle.bookapp.domain.Book;
+import com.aivle.bookapp.dto.UpdateBookCoverImageUrlCommand;
 import com.aivle.bookapp.exception.BookNotFoundException;
 import com.aivle.bookapp.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
@@ -91,6 +92,14 @@ public class BookService {
 
         // 4. 카테고리없고, 검색어도 없는 경우 -> 전체조회
         return bookRepository.findAll();
+    }
+
+    @Transactional
+    public Book updateCoverImageUrl(Long id, UpdateBookCoverImageUrlCommand command){
+        Book book = getBookById(id);
+        book.setCoverImageUrl(command.coverImageUrl());
+
+        return bookRepository.save(book);
     }
 
 }
