@@ -83,7 +83,7 @@ public class BookController {
         // bookService가 읽기 편한 UpdateBookCommand로 변환
         UpdateBookCommand command = request.toCommand();
         // bookService로부터 수정된 id번 책을 command 형태로 BookDto에 담아 가져옴
-        BookDto updatedBookDto = bookService.updateBook(id, command);
+        BookDto updatedBookDto = bookService.patchBook(id, command);
         // bookService로부터 받은 updatedBookDto를 프론트엔드를 위한 BookResponse로 재포장
         return ResponseEntity.ok(BookResponse.from(updatedBookDto));
     }
