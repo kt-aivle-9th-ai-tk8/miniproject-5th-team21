@@ -81,7 +81,7 @@ public class BookController {
     // @RequestBody로 넘어온 JSON 데이터를 PatchBookCoverImageUrlRequest에 담음
     public ResponseEntity<BookResponse> aiBookCover(@PathVariable Long id, @RequestBody PatchBookCoverImageUrlRequest request) {
         //
-        UpdateBookCoverImageUrlCommand command = new UpdateBookCoverImageUrlCommand(request.coverImageUrl());
+        UpdateBookCoverImageUrlCommand command = request.toCommand();
         // bookService로부터 id번 책의 AI 표지를 command 형태로 BookDto에 담아 가져옴
         BookDto aiCoverDto = bookService.updateCoverImageUrl(id, command);
         // bookService로부터 받은 aiCoverDto를 프론트엔드를 위한 BookResponse로 재포장
