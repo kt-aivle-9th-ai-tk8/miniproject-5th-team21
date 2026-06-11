@@ -13,7 +13,7 @@ public record PutBookRequest(
         String coverImageUrl,
         String category,
         // createdAt(생성일자)는 수정되지 않으므로 요청에 포함하지 않습니다.
-        @NotBlank(message="JPA Auditing이 적용되어있지 않으므로, 생성일자를 주입해주십시오.")
+        @NotBlank(message="JPA Auditing이 적용되어있지 않으므로, 수정일자를 주입해주십시오.")
         String updatedAt
 ) {
     public UpdateBookCommand toCommand() {
