@@ -35,19 +35,104 @@ http://localhost:8080
 
 ## 📝 API 요약
 
-| 기능       | Method | Endpoint     |
-| -------- | ------ | ------------ |
-| 도서 목록 조회 | GET    | `/books`     |
-| 도서 상세 조회 | GET    | `/books/:id` |
-| 신규 도서 등록 | POST   | `/books`     |
-| 도서 정보 수정 | PATCH  | `/books/:id` |
-| 도서 정보 삭제 | DELETE | `/books/:id` |
+| 기능         | Method | Endpoint           | 비고  |
+|------------|--------|--------------------|-----|
+| 도서 목록 조회   | GET    | `/books`           |     |
+| 도서 상세 조회   | GET    | `/books/:id`       |     |
+| 신규 도서 등록   | POST   | `/books`           |     |
+| 도서 정보 수정   | PUT    | `/books/:id`       |     |
+| 도서 정보 삭제   | DELETE | `/books/:id`       |     |
+| 도서 AI표지 갱신 | PATCH  | `/books/:id/cover` | TBD |
+| 도서 정보 부분수정 | PATCH  | `/books/:id`       | TBD |
 
 ---
 
-# 🔍 API 요청 / 응답 예시
+# 🔍 API 요청 / 응답 테스트 결과
 
-## 1️⃣ 도서 목록 조회
+> 미션 3
+
+## 1. 도서 등록
+
+### Request
+
+```http
+POST /books
+```
+
+#### Request Body
+
+```json
+{
+  "id": "",
+  "title": "흥부와 놀부",
+  "author": "저자미상",
+  "content": "옛날 옛적 흥부와 놀부가 살았어요. ...",
+  "coverImageUrl": "",
+  "category": "소설",
+  "createdAt": "2026-06-01T12:34:56.789Z",
+  "updatedAt": "2026-06-01T12:34:56.789Z"
+}
+```
+
+### Response
+
+```http
+201 Created
+```
+
+#### Response Body
+```json
+{
+  "author": "저자미상",
+  "category": "소설",
+  "content": "옛날 옛적 흥부와 놀부가 살았어요. ...",
+  "coverImageUrl": "",
+  "createdAt": "2026-06-01T12:34:56.789Z",
+  "id": 1,
+  "title": "흥부와 놀부",
+  "updatedAt": "2026-06-01T12:34:56.789Z"
+}
+```
+
+![POST /books](src/main/resources/screenshots/swagger/post_books.png)
+
+### 잘못된 요청 - 필수 필드 공란
+#### Request
+
+```http
+POST /books
+```
+
+- content 공란
+```json
+{
+  "id": "",
+  "title": "흥부와 놀부",
+  "author": "저자미상",
+  "content": "",
+  "coverImageUrl": "",
+  "category": "소설",
+  "createdAt": "2026-06-01T12:34:56.789Z",
+  "updatedAt": "2026-06-01T12:34:56.789Z"
+}
+```
+
+#### Response
+
+```http
+400 Bad Request
+```
+
+```json
+{
+  "status": 400,
+  "message": "content: 공백일 수 없습니다"
+}
+```
+
+![POST /books (내용 공란)](src/main/resources/screenshots/swagger/post_books_blankcontent.png)
+
+## 2. 도서 목록 조회
 
 ### Request
 
@@ -57,58 +142,41 @@ GET /books
 
 ### Response
 
+```http
+200 OK
+```
+
+#### Response Body
 ```json
 [
   {
+    "author": "저자미상",
+    "category": "소설",
+    "content": "옛날 옛적 흥부와 놀부가 살았어요. ...",
+    "coverImageUrl": "",
+    "createdAt": "2026-06-01T12:34:56.789Z",
     "id": 1,
-    "title": "클린 코드",
-    "author": "로버트 C. 마틴",
-    "category": "IT/디지털",
-    "content": "애자일 소프트웨어 장인 정신 기술 서적...",
-    "coverImageUrl": "data:image/png;base64,...",
-    "createdAt": "2026-05-26T15:45:00.000Z",
-    "updatedAt": "2026-05-26T15:45:00.000Z"
+    "title": "흥부와 놀부",
+    "updatedAt": "2026-06-01T12:34:56.789Z"
   },
   {
+    "author": "놀부아님",
+    "category": "소설",
+    "content": "옛날 옛적 아주 멋진 놀부와 쫄딱 망한 흥부가 살고있었대, ...",
+    "coverImageUrl": "",
+    "createdAt": "2026-06-01T12:34:56.789Z",
     "id": 2,
-    "title": "클린하지 않은 코드",
-    "author": "로버트 주니어",
-    "category": "IT/디지털",
-    "content": "애자일하지 않은 코드도 괜찮다! ...",
-    "coverImageUrl": "data:image/png;base64,...",
-    "createdAt": "2026-05-26T15:45:00.000Z",
-    "updatedAt": "2026-05-26T15:45:00.000Z"
+    "title": "놀부와 흥부",
+    "updatedAt": "2026-06-01T12:34:56.789Z"
   }
 ]
 ```
 
----
-
-## 2️⃣ 도서 등록
-
-### Request
-
-```http
-POST /books
-```
-
-### Request Body
-
-```json
-{
-  "title": "리팩터링 2판",
-  "author": "마틴 파울러",
-  "category": "IT/디지털",
-  "content": "코드를 개선하는 객체지향 기술과 패턴.",
-  "coverImageUrl": "data:image/png;base64,...",
-  "createdAt": "2026-05-26T15:50:00.000Z",
-  "updatedAt": "2026-05-26T15:50:00.000Z"
-}
-```
+![GET /books](src/main/resources/screenshots/swagger/get_books.png)
 
 ---
 
-## 3️⃣ 도서 단건 조회
+## 3. 도서 단건 조회
 
 ### Request
 
@@ -118,55 +186,177 @@ GET /books/1
 
 ### Response
 
+```http
+200 OK
+```
+
+#### Response Body
 ```json
 {
-    "id": 1,
-    "title": "클린 코드",
-    "author": "로버트 C. 마틴",
-    "category": "IT/디지털",
-    "content": "애자일 소프트웨어 장인 정신 기술 서적...",
-    "coverImageUrl": "data:image/png;base64,...",
-    "createdAt": "2026-05-26T15:45:00.000Z",
-    "updatedAt": "2026-05-26T15:45:00.000Z"
+  "author": "저자미상",
+  "category": "소설",
+  "content": "옛날 옛적 흥부와 놀부가 살았어요. ...",
+  "coverImageUrl": "",
+  "createdAt": "2026-06-01T12:34:56.789Z",
+  "id": 1,
+  "title": "흥부와 놀부",
+  "updatedAt": "2026-06-01T12:34:56.789Z"
 }
 ```
 
-존재하지 않는 ID 요청 시 `404 Not Found` 또는 빈 응답이 반환될 수 있습니다.
+![GET /books/1](src/main/resources/screenshots/swagger/get_books_1.png)
+
+### 잘못된 요청 - id 유효하지 않음
+#### Request
+- 999번 도서 호출 (999번 도서 없음)
+```http
+GET /books/999
+```
+
+#### Response
+```http
+404 Not Found
+```
+
+```json
+{
+  "status": 404,
+  "message": "Book not found with id: 999"
+}
+```
+
+![GET /books/999](src/main/resources/screenshots/swagger/get_books_999.png)
 
 ---
 
-## 4️⃣ 도서 수정
+## 4. 도서 수정
 
 ### Request
 
 ```http
-PATCH /books/1
+PUT /books/1
 ```
 
-### Request Body
+#### Request Body
 
 ```json
 {
-    "id": 1,
-    "title": "클린 코드(개정판)",
-    "author": "로버트 C. 마틴",
-    "category": "IT/디지털",
-    "content": "애자일 소프트웨어 장인 정신 기술 서적의 개정판으로...",
-    "coverImageUrl": "data:image/png;base64,...",
-    "createdAt": "2026-05-26T15:45:00.000Z",
-    "updatedAt": "2026-05-28T18:55:00.000Z"
+  "title": "클린 코드(개정판)",
+  "author": "로버트 C. 마틴",
+  "content": "애자일 소프트웨어 장인 정신 기술 서적의 개정판으로...",
+  "coverImageUrl": "",
+  "category": "IT/디지털",
+  "createdAt": "2026-05-26T15:45:00.000Z",
+  "updatedAt": "2026-05-26T15:45:00.000Z"
 }
 ```
 
+### Response
+
+```http
+200 OK
+```
+
+#### Response Body
+
+```json
+{
+  "author": "로버트 C. 마틴",
+  "category": "IT/디지털",
+  "content": "애자일 소프트웨어 장인 정신 기술 서적의 개정판으로...",
+  "coverImageUrl": "",
+  "createdAt": "2026-06-01T12:34:56.789Z",
+  "id": 1,
+  "title": "클린 코드(개정판)",
+  "updatedAt": "2026-05-26T15:45:00.000Z"
+}
+```
+
+![PUT /books/1](src/main/resources/screenshots/swagger/put_books_1.png)
+
+### 잘못된 요청 - id 유효하지 않음
+#### Request
+- 999번 도서 호출 (999번 도서 없음)
+```http
+PUT /books/999
+```
+
+#### Response
+
+```http
+404 Not Found
+```
+
+```json
+{
+  "status": 404,
+  "message": "Book not found with id: 999"
+}
+```
+
+![PUT /books/999](src/main/resources/screenshots/swagger/put_books_999.png)
+
+### 잘못된 요청 - 필수 필드 공란
+#### Request
+```http
+PUT /books/1
+```
+
+```json
+{
+  "title": "클린 코드(개정판)",
+  "author": "로버트 C. 마틴",
+  "content": "",
+  "coverImageUrl": "",
+  "category": "IT/디지털",
+  "createdAt": "2026-05-26T15:45:00.000Z",
+  "updatedAt": "2026-05-26T15:45:00.000Z"
+}
+```
+
+#### Response
+
+```http
+400 Bad Request
+```
+
+```json
+{
+  "status": 400,
+  "message": "content: 공백일 수 없습니다"
+}
+```
+
+이미지 추가 예정 (DTO적용 후)
+
 ---
 
-## 5️⃣ 도서 삭제
+## 5. 도서 삭제
 
 ### Request
 
 ```http
 DELETE /books/1
 ```
+
+### Response
+```http
+204 No Content
+```
+
+![img.png](src/main/resources/screenshots/swagger/delete_books_1.png)
+
+---
+
+## 6. 도서 AI커버이미지 수정
+
+TBD
+
+---
+
+## 7. 도서 부분수정
+
+TBD
 
 ---
 
@@ -189,3 +379,80 @@ DELETE /books/1
   - WebConfig(CORS), GlobalExceptionHandler, 풀스택 디버깅, 트러블슈팅 정리
 - AI / Frontend 연동: 박지연
   - Frontend 코드 분석, fetch URL 변경 / 1차 연동, OpenAI 표지 흐름, E2E 시연 준비
+
+
+# 📚 Frontend-Backend 연동
+
+---
+
+## 🟡 도서 등록
+
+**POST /books**
+
+![도서등록.png](src/main/resources/screenshots/react/도서등록.png)
+
+---
+
+## 🟢 도서 목록 조회
+
+**GET /books**
+
+![도서조회.png](src/main/resources/screenshots/react/도서조회.png)
+
+---
+
+## 🟢 도서 상세 조회
+
+**GET /books/{id}**
+
+![도서상세.png](src/main/resources/screenshots/react/도서상세.png)
+
+---
+
+## 🔵 도서 수정
+
+**PUT /books/{id}**
+
+![도서수정P.png](src/main/resources/screenshots/react/도서수정P.png)
+
+GET /books/{id} (수정 후 새로고침)
+![도서수정후.png](src/main/resources/screenshots/react/도서수정후.png)
+
+---
+
+## 🔴 도서 삭제
+
+**DELETE /api/books/{id}**
+![도서삭제.png](src/main/resources/screenshots/react/도서삭제.png)
+
+GET /books (삭제 후 도서목록 새로고침)
+![도서삭제후.png](src/main/resources/screenshots/react/도서삭제후.png)
+
+---
+
+## 프론트-백엔드 연동 흐름
+
+1. 사용자가 도서 등록 화면 입력
+2. Frontend에서 API 요청
+3. Backend에서 데이터 저장
+4. DB 저장 완료
+5. 결과 반환
+6. Frontend 화면 갱신
+
+---
+
+# 📝 예외 검증 시나리오
+
+## 400 Bad Request
+Postman
+![400_postman.png](400_postman.png)
+
+Frontend
+![400_frontend.png](400_frontend.png)
+
+## 404 Not Found
+Postman -> 유효하지 않은 id
+![404_postman.png](404_postman.png)
+
+Frontend
+![404_forntend.png](404_frontend.png)
