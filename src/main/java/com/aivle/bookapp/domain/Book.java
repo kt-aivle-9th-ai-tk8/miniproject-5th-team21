@@ -2,14 +2,14 @@ package com.aivle.bookapp.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 @Getter
 @Setter
-@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE) // builder 사용 위한 생성
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Book {
 
