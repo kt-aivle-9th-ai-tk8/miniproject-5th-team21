@@ -136,4 +136,17 @@ public class BookService {
         );
     }
 
+    @Transactional
+    public BookDto patchBook(Long id, UpdateBookCommand command){
+        Book existing = getRawBookById(id);
+
+        if(command.title() != null) existing.setTitle(command.title());
+        if(command.author() != null) existing.setAuthor(command.author());
+        if(command.content() != null) existing.setContent(command.content());
+        if(command.category() != null) existing.setCategory(command.category());
+        if(command.coverImageUrl() != null) existing.setCoverImageUrl(command.coverImageUrl());
+        if(command.updatedAt() != null) existing.setUpdatedAt(command.updatedAt());
+
+        return BookDto.from(bookRepository.save(existing));
+    }
 }
