@@ -20,8 +20,7 @@ public class BookService {
     private final BookRepository bookRepository;
 
     // Service 내부에서 호출하는 용도
-    @Transactional(readOnly = true)
-    protected Book getRawBookById(Long id){
+    private Book getRawBookById(Long id){
         return bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
     }
@@ -64,7 +63,7 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
-    public List<BookDto> searchBooksFilter(String category, String keyword, String searchType) {
+    public List<BookDto> searchBooksFilter(String category, String searchType, String keyword) {
 
         String cleanCategory   = (category != null && !category.trim().isEmpty()) ? category.trim() : null;
         String cleanKeyword    = (keyword != null && !keyword.trim().isEmpty()) ? keyword.trim() : null;
