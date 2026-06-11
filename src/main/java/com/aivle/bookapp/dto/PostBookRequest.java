@@ -16,7 +16,7 @@ public record PostBookRequest(
         String category,
         @NotBlank(message="JPA Auditing이 적용되어있지 않으므로, 생성일자를 주입해주십시오.")
         String createdAt,
-        @NotBlank(message="JPA Auditing이 적용되어있지 않으므로, 생성일자를 주입해주십시오.")
+        @NotBlank(message="JPA Auditing이 적용되어있지 않으므로, 수정일자를 주입해주십시오.")
         String updatedAt
 ) {
     public CreateBookCommand toCommand()
