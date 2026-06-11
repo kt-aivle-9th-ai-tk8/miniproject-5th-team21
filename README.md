@@ -36,18 +36,101 @@ http://localhost:8080
 ## 📝 API 요약
 
 | 기능       | Method | Endpoint     |
-| -------- | ------ | ------------ |
+| -------- |--------| ------------ |
 | 도서 목록 조회 | GET    | `/books`     |
 | 도서 상세 조회 | GET    | `/books/:id` |
 | 신규 도서 등록 | POST   | `/books`     |
-| 도서 정보 수정 | PATCH  | `/books/:id` |
+| 도서 정보 수정 | PUT    | `/books/:id` |
 | 도서 정보 삭제 | DELETE | `/books/:id` |
 
 ---
 
-# 🔍 API 요청 / 응답 예시
+# 🔍 API 요청 / 응답 테스트 결과
 
-## 1️⃣ 도서 목록 조회
+> 미션 3
+
+## 1. 도서 등록
+
+### Request
+
+```http
+POST /books
+```
+
+#### Request Body
+
+```json
+{
+  "id": "",
+  "title": "흥부와 놀부",
+  "author": "저자미상",
+  "content": "옛날 옛적 흥부와 놀부가 살았어요. ...",
+  "coverImageUrl": "",
+  "category": "소설",
+  "createdAt": "2026-06-01T12:34:56.789Z",
+  "updatedAt": "2026-06-01T12:34:56.789Z"
+}
+```
+
+### Response
+
+```http
+201 Created
+```
+
+#### Response Body
+```json
+{
+  "author": "저자미상",
+  "category": "소설",
+  "content": "옛날 옛적 흥부와 놀부가 살았어요. ...",
+  "coverImageUrl": "",
+  "createdAt": "2026-06-01T12:34:56.789Z",
+  "id": 1,
+  "title": "흥부와 놀부",
+  "updatedAt": "2026-06-01T12:34:56.789Z"
+}
+```
+
+![POST /books](src/main/resources/screenshots/post_books.png)
+
+### 잘못된 요청 - 필수 필드 공란
+#### Request
+
+```http
+POST /books
+```
+
+- content 공란
+```json
+{
+  "id": "",
+  "title": "흥부와 놀부",
+  "author": "저자미상",
+  "content": "",
+  "coverImageUrl": "",
+  "category": "소설",
+  "createdAt": "2026-06-01T12:34:56.789Z",
+  "updatedAt": "2026-06-01T12:34:56.789Z"
+}
+```
+
+#### Response
+
+```http
+400 Bad Request
+```
+
+```json
+{
+  "status": 400,
+  "message": "content: 공백일 수 없습니다"
+}
+```
+
+![POST /books (내용 공란)](src/main/resources/screenshots/post_books_blankcontent.png)
+
+## 2. 도서 목록 조회
 
 ### Request
 
@@ -57,58 +140,41 @@ GET /books
 
 ### Response
 
+```http
+200 OK
+```
+
+#### Response Body
 ```json
 [
   {
+    "author": "저자미상",
+    "category": "소설",
+    "content": "옛날 옛적 흥부와 놀부가 살았어요. ...",
+    "coverImageUrl": "",
+    "createdAt": "2026-06-01T12:34:56.789Z",
     "id": 1,
-    "title": "클린 코드",
-    "author": "로버트 C. 마틴",
-    "category": "IT/디지털",
-    "content": "애자일 소프트웨어 장인 정신 기술 서적...",
-    "coverImageUrl": "data:image/png;base64,...",
-    "createdAt": "2026-05-26T15:45:00.000Z",
-    "updatedAt": "2026-05-26T15:45:00.000Z"
+    "title": "흥부와 놀부",
+    "updatedAt": "2026-06-01T12:34:56.789Z"
   },
   {
+    "author": "놀부아님",
+    "category": "소설",
+    "content": "옛날 옛적 아주 멋진 놀부와 쫄딱 망한 흥부가 살고있었대, ...",
+    "coverImageUrl": "",
+    "createdAt": "2026-06-01T12:34:56.789Z",
     "id": 2,
-    "title": "클린하지 않은 코드",
-    "author": "로버트 주니어",
-    "category": "IT/디지털",
-    "content": "애자일하지 않은 코드도 괜찮다! ...",
-    "coverImageUrl": "data:image/png;base64,...",
-    "createdAt": "2026-05-26T15:45:00.000Z",
-    "updatedAt": "2026-05-26T15:45:00.000Z"
+    "title": "놀부와 흥부",
+    "updatedAt": "2026-06-01T12:34:56.789Z"
   }
 ]
 ```
 
----
-
-## 2️⃣ 도서 등록
-
-### Request
-
-```http
-POST /books
-```
-
-### Request Body
-
-```json
-{
-  "title": "리팩터링 2판",
-  "author": "마틴 파울러",
-  "category": "IT/디지털",
-  "content": "코드를 개선하는 객체지향 기술과 패턴.",
-  "coverImageUrl": "data:image/png;base64,...",
-  "createdAt": "2026-05-26T15:50:00.000Z",
-  "updatedAt": "2026-05-26T15:50:00.000Z"
-}
-```
+![GET /books](src/main/resources/screenshots/get_books.png)
 
 ---
 
-## 3️⃣ 도서 단건 조회
+## 3. 도서 단건 조회
 
 ### Request
 
@@ -118,45 +184,148 @@ GET /books/1
 
 ### Response
 
+```http
+200 OK
+```
+
+#### Response Body
 ```json
 {
-    "id": 1,
-    "title": "클린 코드",
-    "author": "로버트 C. 마틴",
-    "category": "IT/디지털",
-    "content": "애자일 소프트웨어 장인 정신 기술 서적...",
-    "coverImageUrl": "data:image/png;base64,...",
-    "createdAt": "2026-05-26T15:45:00.000Z",
-    "updatedAt": "2026-05-26T15:45:00.000Z"
+  "author": "저자미상",
+  "category": "소설",
+  "content": "옛날 옛적 흥부와 놀부가 살았어요. ...",
+  "coverImageUrl": "",
+  "createdAt": "2026-06-01T12:34:56.789Z",
+  "id": 1,
+  "title": "흥부와 놀부",
+  "updatedAt": "2026-06-01T12:34:56.789Z"
 }
 ```
 
-존재하지 않는 ID 요청 시 `404 Not Found` 또는 빈 응답이 반환될 수 있습니다.
+![GET /books/1](src/main/resources/screenshots/get_books_1.png)
+
+### 잘못된 요청 - id 유효하지 않음
+#### Request
+- 999번 도서 호출 (999번 도서 없음)
+```http
+GET /books/999
+```
+
+#### Response
+```http
+404 Not Found
+```
+
+```json
+{
+  "status": 404,
+  "message": "Book not found with id: 999"
+}
+```
+
+![GET /books/999](src/main/resources/screenshots/get_books_999.png)
 
 ---
 
-## 4️⃣ 도서 수정
+## 4. 도서 수정
 
 ### Request
 
 ```http
-PATCH /books/1
+PUT /books/1
 ```
 
-### Request Body
+#### Request Body
 
 ```json
 {
-    "id": 1,
-    "title": "클린 코드(개정판)",
-    "author": "로버트 C. 마틴",
-    "category": "IT/디지털",
-    "content": "애자일 소프트웨어 장인 정신 기술 서적의 개정판으로...",
-    "coverImageUrl": "data:image/png;base64,...",
-    "createdAt": "2026-05-26T15:45:00.000Z",
-    "updatedAt": "2026-05-28T18:55:00.000Z"
+  "title": "클린 코드(개정판)",
+  "author": "로버트 C. 마틴",
+  "content": "애자일 소프트웨어 장인 정신 기술 서적의 개정판으로...",
+  "coverImageUrl": "",
+  "category": "IT/디지털",
+  "createdAt": "2026-05-26T15:45:00.000Z",
+  "updatedAt": "2026-05-26T15:45:00.000Z"
 }
 ```
+
+### Response
+
+```http
+200 OK
+```
+
+#### Response Body
+
+```json
+{
+  "author": "로버트 C. 마틴",
+  "category": "IT/디지털",
+  "content": "애자일 소프트웨어 장인 정신 기술 서적의 개정판으로...",
+  "coverImageUrl": "",
+  "createdAt": "2026-06-01T12:34:56.789Z",
+  "id": 1,
+  "title": "클린 코드(개정판)",
+  "updatedAt": "2026-05-26T15:45:00.000Z"
+}
+```
+
+![PUT /books/1](src/main/resources/screenshots/put_books_1.png)
+
+### 잘못된 요청 - id 유효하지 않음
+#### Request
+- 999번 도서 호출 (999번 도서 없음)
+```http
+PUT /books/999
+```
+
+#### Response
+
+```http
+404 Not Found
+```
+
+```json
+{
+  "status": 404,
+  "message": "Book not found with id: 999"
+}
+```
+
+![PUT /books/999](src/main/resources/screenshots/put_books_999.png)
+
+### 잘못된 요청 - 필수 필드 공란
+#### Request
+```http
+PUT /books/1
+```
+
+```json
+{
+  "title": "클린 코드(개정판)",
+  "author": "로버트 C. 마틴",
+  "content": "",
+  "coverImageUrl": "",
+  "category": "IT/디지털",
+  "createdAt": "2026-05-26T15:45:00.000Z",
+  "updatedAt": "2026-05-26T15:45:00.000Z"
+}
+```
+
+#### Response
+
+```http
+400 Bad Request
+```
+
+```json
+{
+  "status": 400,
+  "message": "content: 공백일 수 없습니다"
+}
+```
+
+이미지 추가 예정 (DTO적용 후)
 
 ---
 
@@ -167,6 +336,13 @@ PATCH /books/1
 ```http
 DELETE /books/1
 ```
+
+### Response
+```http
+204 No Content
+```
+
+![img.png](src/main/resources/screenshots/delete_books_1.png)
 
 ---
 
