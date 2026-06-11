@@ -31,8 +31,9 @@ public class BookController {
     // 도서 삭제
     @DeleteMapping("/books/{id}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
+        // bookService에서 id번 책 삭제
         bookService.deleteBook(id);
-
+        // 프론트엔드에게 돌려줄 BookResponse가 없음을 알림
         return ResponseEntity.noContent().build();
     }
 
@@ -63,16 +64,18 @@ public class BookController {
     // 카테고리, 검색유형, 키워드 검색
     @GetMapping("/books")
     public ResponseEntity<List<BookResponse>> searchFilter(
+            // null일 때는 전체 목록 조회, 조건 달면 필터링된 목록 반환
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String searchType,
             @RequestParam(required = false) String keyword
     ) {
-        //
+        // bookService로부터 category, searchType, keyword 각 조건에 맞는 책들을 List<BookDto> 형태로 가져옴
         List<BookDto> books = bookService.searchBooksFilter(category, searchType, keyword);
+        // Stream API를 사용해 stream에 Dto들을 올려놓고 BookResponse로 재포장 후 다시 하나의 리스트로 collect에 담아냄
         List<BookResponse> responses = books.stream()
                 .map(BookResponse::from)
                 .collect(Collectors.toList());
-        // 프론트엔드를 위한 responses로 재포장
+        // 재포장된 리스트인 responses를 프론트엔드에게 전달
         return ResponseEntity.ok(responses);
     }
 
@@ -80,7 +83,7 @@ public class BookController {
     @PatchMapping("/books/{id}/cover")
     // @RequestBody로 넘어온 JSON 데이터를 PatchBookCoverImageUrlRequest에 담음
     public ResponseEntity<BookResponse> aiBookCover(@PathVariable Long id, @RequestBody PatchBookCoverImageUrlRequest request) {
-        //
+        // bookService가 읽기 편한 UpdateBookCoverImageUrlCommand로 변환
         UpdateBookCoverImageUrlCommand command = request.toCommand();
         // bookService로부터 id번 책의 AI 표지를 command 형태로 BookDto에 담아 가져옴
         BookDto aiCoverDto = bookService.updateCoverImageUrl(id, command);
