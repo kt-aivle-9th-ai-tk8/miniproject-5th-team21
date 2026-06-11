@@ -17,7 +17,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     }
     // category 명시
     List<Book> findByCategory(String category);
-    List<Book> findByCategoryAndTitleContaining(String category, String author);
+    List<Book> findByCategoryAndTitleContaining(String category, String title);
     List<Book> findByCategoryAndAuthorContaining(String category, String author);
     default List<Book> findByCategoryAndSearchKeyword(String category, String keyword) {
         return findByCategoryAndTitleContainingOrCategoryAndAuthorContaining(category, keyword, category, keyword);
