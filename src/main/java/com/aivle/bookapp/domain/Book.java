@@ -2,14 +2,14 @@ package com.aivle.bookapp.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 @Getter
 @Setter
-@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE) // builder 사용 위한 생성
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Book {
 
@@ -36,6 +36,9 @@ public class Book {
     @Lob                    // 방대한 텍스트 저장 명시 (DB DDL)
     private String coverImageUrl;
 
+    @Column(nullable=false, length=50)  // DB 제약 (DB DDL)
+    @NotBlank                           // Bean Validation
+    @Length(max=50)                     // Bean Validation
     private String category;
 
     private String createdAt;
