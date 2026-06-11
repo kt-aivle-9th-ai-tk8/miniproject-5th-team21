@@ -94,7 +94,7 @@ POST /books
 }
 ```
 
-![POST /books](src/main/resources/screenshots/post_books.png)
+![POST /books](src/main/resources/screenshots/swagger/post_books.png)
 
 ### 잘못된 요청 - 필수 필드 공란
 #### Request
@@ -130,7 +130,7 @@ POST /books
 }
 ```
 
-![POST /books (내용 공란)](src/main/resources/screenshots/post_books_blankcontent.png)
+![POST /books (내용 공란)](src/main/resources/screenshots/swagger/post_books_blankcontent.png)
 
 ## 2. 도서 목록 조회
 
@@ -172,7 +172,7 @@ GET /books
 ]
 ```
 
-![GET /books](src/main/resources/screenshots/get_books.png)
+![GET /books](src/main/resources/screenshots/swagger/get_books.png)
 
 ---
 
@@ -204,7 +204,7 @@ GET /books/1
 }
 ```
 
-![GET /books/1](src/main/resources/screenshots/get_books_1.png)
+![GET /books/1](src/main/resources/screenshots/swagger/get_books_1.png)
 
 ### 잘못된 요청 - id 유효하지 않음
 #### Request
@@ -225,7 +225,7 @@ GET /books/999
 }
 ```
 
-![GET /books/999](src/main/resources/screenshots/get_books_999.png)
+![GET /books/999](src/main/resources/screenshots/swagger/get_books_999.png)
 
 ---
 
@@ -272,7 +272,7 @@ PUT /books/1
 }
 ```
 
-![PUT /books/1](src/main/resources/screenshots/put_books_1.png)
+![PUT /books/1](src/main/resources/screenshots/swagger/put_books_1.png)
 
 ### 잘못된 요청 - id 유효하지 않음
 #### Request
@@ -294,7 +294,7 @@ PUT /books/999
 }
 ```
 
-![PUT /books/999](src/main/resources/screenshots/put_books_999.png)
+![PUT /books/999](src/main/resources/screenshots/swagger/put_books_999.png)
 
 ### 잘못된 요청 - 필수 필드 공란
 #### Request
@@ -344,7 +344,7 @@ DELETE /books/1
 204 No Content
 ```
 
-![img.png](src/main/resources/screenshots/delete_books_1.png)
+![img.png](src/main/resources/screenshots/swagger/delete_books_1.png)
 
 ---
 
@@ -389,7 +389,7 @@ TBD
 
 **POST /books**
 
-![도서등록.png](도서등록.png)
+![도서등록.png](src/main/resources/screenshots/react/도서등록.png)
 
 ---
 
@@ -397,7 +397,7 @@ TBD
 
 **GET /books**
 
-![도서조회.png](도서조회.png)
+![도서조회.png](src/main/resources/screenshots/react/도서조회.png)
 
 ---
 
@@ -405,28 +405,28 @@ TBD
 
 **GET /books/{id}**
 
-![도서상세.png](도서상세.png)
+![도서상세.png](src/main/resources/screenshots/react/도서상세.png)
 
 ---
 
 ## 🔵 도서 수정
 
-**PUT /api/books/{id}**
+**PUT /books/{id}**
 
-![도서수정P.png](도서수정P.png)
+![도서수정P.png](src/main/resources/screenshots/react/도서수정P.png)
 
-GET /books/{id} (수정 후 상세)
-![도서수정후.png](도서수정후.png)
+GET /books/{id} (수정 후 새로고침)
+![도서수정후.png](src/main/resources/screenshots/react/도서수정후.png)
 
 ---
 
 ## 🔴 도서 삭제
 
 **DELETE /api/books/{id}**
-![도서삭제.png](도서삭제.png)
+![도서삭제.png](src/main/resources/screenshots/react/도서삭제.png)
 
-GET /books (삭제 후 도서 조회)
-![도서삭제후.png](도서삭제후.png)
+GET /books (삭제 후 도서목록 새로고침)
+![도서삭제후.png](src/main/resources/screenshots/react/도서삭제후.png)
 
 ---
 
