@@ -98,7 +98,7 @@ public class BookService {
         Book book = getBookById(id);
         book.setCoverImageUrl(coverImageUrl);
 
-        return book;
+        return bookRepository.save(book);
     }
 
 }
