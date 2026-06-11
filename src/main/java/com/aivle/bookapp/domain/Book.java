@@ -38,6 +38,7 @@ public class Book {
 
     @Column(nullable=false, length=50)  // DB 제약 (DB DDL)
     @NotBlank                           // Bean Validation
+    @Length(max=50)                     // Bean Validation
     private String category;
 
     private String createdAt;
