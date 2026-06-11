@@ -1,8 +1,14 @@
 package com.aivle.bookapp.controller;
 
-import com.aivle.bookapp.domain.Book;
 import com.aivle.bookapp.dto.*;
+import com.aivle.bookapp.exception.ErrorResponse;
 import com.aivle.bookapp.service.BookService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +25,13 @@ public class BookController {
     private final BookService bookService;
 
     // 도서 단건 조회, 상세 정보
+    @Operation(summary = "도서 단건 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공",
+                    content = @Content(schema = @Schema(implementation = BookResponse.class))),
+            @ApiResponse(responseCode = "404", description = "도서 없음",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @GetMapping("/books/{id}")
     // 반환형은 프론트엔드가 요구하는 형태일 것
     public ResponseEntity<BookResponse> getBook(@PathVariable Long id) {
@@ -29,6 +42,13 @@ public class BookController {
     }
 
     // 도서 삭제
+    @Operation(summary = "도서 단건 삭제")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "삭제 성공",
+                    content = @Content()),
+            @ApiResponse(responseCode = "404", description = "도서 없음",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @DeleteMapping("/books/{id}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
         // bookService에서 id번 책 삭제
@@ -38,6 +58,13 @@ public class BookController {
     }
 
     // 도서 수정
+    @Operation(summary = "도서 단건 수정")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "수정 성공",
+                    content = @Content(schema = @Schema(implementation = BookResponse.class))),
+            @ApiResponse(responseCode = "404", description = "도서 없음",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PutMapping("/books/{id}")
     // @RequestBody로 넘어온 JSON 데이터를 PutBookRequest에 담음
     public ResponseEntity<BookResponse> updateBook(@PathVariable Long id, @Valid @RequestBody PutBookRequest request) {
@@ -62,6 +89,13 @@ public class BookController {
     }
 
     // 도서 생성
+    @Operation(summary = "도서 단건 생성")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "생성 성공",
+                    content = @Content(schema = @Schema(implementation = BookResponse.class))),
+            @ApiResponse(responseCode = "400", description = "검증 실패",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/books")
     // @RequestBody로 넘어온 JSON 데이터를 PostBookRequest에 담음
     public ResponseEntity<BookResponse> createBook(@Valid @RequestBody PostBookRequest request) {
@@ -74,6 +108,11 @@ public class BookController {
     }
 
     // 카테고리, 검색유형, 키워드 검색
+    @Operation(summary = "도서 리스트 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = BookResponse.class)))),
+    })
     @GetMapping("/books")
     public ResponseEntity<List<BookResponse>> searchFilter(
             // null일 때는 전체 목록 조회, 조건 달면 필터링된 목록 반환
@@ -92,11 +131,18 @@ public class BookController {
     }
 
     // AI 도서 표지 수정
+    @Operation(summary = "도서 표지 수정")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "202", description = "수정 성공",
+                    content = @Content(schema = @Schema(implementation = BookResponse.class))),
+            @ApiResponse(responseCode = "404", description = "도서 없음",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PatchMapping("/books/{id}/cover")
     // @RequestBody로 넘어온 JSON 데이터를 PatchBookCoverImageUrlRequest에 담음
     public ResponseEntity<BookResponse> aiBookCover(@PathVariable Long id, @RequestBody PatchBookCoverImageUrlRequest request) {
         // bookService가 읽기 편한 UpdateBookCoverImageUrlCommand로 변환
-        UpdateBookCoverImageUrlCommand command = request.toCommand();
+        UpdateBookCommand command = request.toCommand();
         // bookService로부터 id번 책의 AI 표지를 command 형태로 BookDto에 담아 가져옴
         BookDto aiCoverDto = bookService.updateCoverImageUrl(id, command);
         // bookService로부터 받은 aiCoverDto를 프론트엔드를 위한 BookResponse로 재포장
