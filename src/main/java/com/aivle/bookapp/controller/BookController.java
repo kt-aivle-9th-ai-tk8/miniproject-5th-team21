@@ -53,11 +53,11 @@ public class BookController {
         return bookService.searchBooksFilter(category, searchType, keyword);
     }
 
-//    // AI 도서 표지 수정
-//    @PatchMapping("/books/{id}/cover")
-//    public ResponseEntity<Book> aiBookCover(@PathVariable Long id, @RequestBody String coverImageUrl) {
-//        Book aiCover = bookService.oooooooo(id, coverImageUrl); // bookService 메소드명 정해지면 수정
-//
-//        return ResponseEntity.status(HttpStatus.ACCEPTED).body(aiCover);
-//    }
+    // AI 도서 표지 수정
+    @PatchMapping("/books/{id}/cover")
+    public ResponseEntity<Book> aiBookCover(@PathVariable Long id, @RequestBody String coverImageUrl) {
+        Book aiCover = bookService.oooooooo(id, coverImageUrl); // bookService 메소드명 정해지면 수정
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(aiCover);
+    }
 }
