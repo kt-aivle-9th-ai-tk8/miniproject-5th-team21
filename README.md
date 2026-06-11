@@ -35,13 +35,15 @@ http://localhost:8080
 
 ## 📝 API 요약
 
-| 기능       | Method | Endpoint     |
-| -------- |--------| ------------ |
-| 도서 목록 조회 | GET    | `/books`     |
-| 도서 상세 조회 | GET    | `/books/:id` |
-| 신규 도서 등록 | POST   | `/books`     |
-| 도서 정보 수정 | PUT    | `/books/:id` |
-| 도서 정보 삭제 | DELETE | `/books/:id` |
+| 기능         | Method | Endpoint           | 비고  |
+|------------|--------|--------------------|-----|
+| 도서 목록 조회   | GET    | `/books`           |     |
+| 도서 상세 조회   | GET    | `/books/:id`       |     |
+| 신규 도서 등록   | POST   | `/books`           |     |
+| 도서 정보 수정   | PUT    | `/books/:id`       |     |
+| 도서 정보 삭제   | DELETE | `/books/:id`       |     |
+| 도서 AI표지 갱신 | PATCH  | `/books/:id/cover` | TBD |
+| 도서 정보 부분수정 | PATCH  | `/books/:id`       | TBD |
 
 ---
 
@@ -329,7 +331,7 @@ PUT /books/1
 
 ---
 
-## 5️⃣ 도서 삭제
+## 5. 도서 삭제
 
 ### Request
 
@@ -343,6 +345,18 @@ DELETE /books/1
 ```
 
 ![img.png](src/main/resources/screenshots/delete_books_1.png)
+
+---
+
+## 6. 도서 AI커버이미지 수정
+
+TBD
+
+---
+
+## 7. 도서 부분수정
+
+TBD
 
 ---
 
