@@ -441,3 +441,18 @@ GET /books (삭제 후 도서목록 새로고침)
 
 ---
 
+# 📝 예외 검증 시나리오
+
+## 400 Bad Request
+Postman
+![400_postman.png](400_postman.png)
+
+Frontend
+![400_frontend.png](400_frontend.png)
+
+## 404 Not Found
+Postman -> 유효하지 않은 id
+![404_postman.png](404_postman.png)
+
+Frontend
+![404_forntend.png](404_frontend.png)
