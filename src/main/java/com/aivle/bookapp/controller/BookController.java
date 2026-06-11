@@ -77,6 +77,13 @@ public class BookController {
     }
 
     // 도서 부분 수정
+    @Operation(summary = "도서 부분 수정", description = "도서의 특정 정보만 선택적으로 수정합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "부분 수정 성공",
+                    content = @Content(schema = @Schema(implementation = BookResponse.class))),
+            @ApiResponse(responseCode = "404", description = "도서 없음",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PatchMapping("/books/{id}")
     // @RequestBody로 넘어온 JSON 데이터를 PatchBookRequest에 담음
     public ResponseEntity<BookResponse> patchBook(@PathVariable Long id, @Valid @RequestBody PatchBookRequest request) {
