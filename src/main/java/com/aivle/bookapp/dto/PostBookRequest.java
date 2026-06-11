@@ -12,7 +12,7 @@ public record PostBookRequest(
         String content,
         @Nullable
         String coverImageUrl,
-        @Nullable
+        @NotNull(message="도서 분류는 필수적으로 지정되어야 합니다.")
         String category,
         @NotNull(message="JPA Auditing이 적용되어있지 않으므로, 생성일자를 주입해주십시오.")
         String createdAt,
