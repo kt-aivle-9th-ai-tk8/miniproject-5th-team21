@@ -1,7 +1,6 @@
 package com.aivle.bookapp.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 public record PutBookRequest(
         @NotBlank(message="도서 제목은 필수적으로 작성되어야 합니다.")
