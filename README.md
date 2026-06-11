@@ -379,3 +379,65 @@ TBD
   - WebConfig(CORS), GlobalExceptionHandler, 풀스택 디버깅, 트러블슈팅 정리
 - AI / Frontend 연동: 박지연
   - Frontend 코드 분석, fetch URL 변경 / 1차 연동, OpenAI 표지 흐름, E2E 시연 준비
+
+
+# 📚 Frontend-Backend 연동
+
+---
+
+## 🟡 도서 등록
+
+**POST /books**
+
+![도서등록.png](도서등록.png)
+
+---
+
+## 🟢 도서 목록 조회
+
+**GET /books**
+
+![도서조회.png](도서조회.png)
+
+---
+
+## 🟢 도서 상세 조회
+
+**GET /books/{id}**
+
+![도서상세.png](도서상세.png)
+
+---
+
+## 🔵 도서 수정
+
+**PUT /api/books/{id}**
+
+![도서수정P.png](도서수정P.png)
+
+GET /books/{id} (수정 후 상세)
+![도서수정후.png](도서수정후.png)
+
+---
+
+## 🔴 도서 삭제
+
+**DELETE /api/books/{id}**
+![도서삭제.png](도서삭제.png)
+
+GET /books (삭제 후 도서 조회)
+![도서삭제후.png](도서삭제후.png)
+
+---
+
+## 프론트-백엔드 연동 흐름
+
+1. 사용자가 도서 등록 화면 입력
+2. Frontend에서 API 요청
+3. Backend에서 데이터 저장
+4. DB 저장 완료
+5. 결과 반환
+6. Frontend 화면 갱신
+
+---
+
