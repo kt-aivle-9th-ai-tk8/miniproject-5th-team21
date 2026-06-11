@@ -3,6 +3,11 @@ package com.aivle.bookapp.dto;
 public record PatchBookCoverImageUrlRequest (
         String coverImageUrl
 ) {
+    public UpdateBookCoverImageUrlCommand toCommand() {
+        return new UpdateBookCoverImageUrlCommand(
+                coverImageUrl
+        );
+    }
 //  // 향후 범용 patchbook 적용 시 이것으로 전환
 //    public UpdateBookCommand toCommand() {
 //        return new UpdateBookCommand(
