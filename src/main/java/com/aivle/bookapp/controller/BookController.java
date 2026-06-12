@@ -77,7 +77,7 @@ public class BookController {
     }
 
     // 도서 부분 수정
-    @Operation(summary = "도서 부분 수정", description = "도서의 특정 정보만 선택적으로 수정합니다.")
+    @Operation(summary = "도서 부분 수정")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "부분 수정 성공",
                     content = @Content(schema = @Schema(implementation = BookResponse.class))),
