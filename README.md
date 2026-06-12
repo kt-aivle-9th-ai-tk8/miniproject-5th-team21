@@ -35,21 +35,22 @@ http://localhost:8080
 
 ## 📝 API 요약
 
-| 기능         | Method | Endpoint           | 비고  |
-|------------|--------|--------------------|-----|
-| 도서 목록 조회   | GET    | `/books`           |     |
-| 도서 상세 조회   | GET    | `/books/:id`       |     |
-| 신규 도서 등록   | POST   | `/books`           |     |
-| 도서 정보 수정   | PUT    | `/books/:id`       |     |
-| 도서 정보 삭제   | DELETE | `/books/:id`       |     |
-| 도서 AI표지 갱신 | PATCH  | `/books/:id/cover` | TBD |
-| 도서 정보 부분수정 | PATCH  | `/books/:id`       | TBD |
+| 기능         | Method | Endpoint           | 쿼리 파라미터                       |
+|------------|--------|--------------------|-------------------------------|
+| 도서 목록 조회   | GET    | `/books`           | category, searchType, keyword |
+| 도서 상세 조회   | GET    | `/books/:id`       |                               |
+| 신규 도서 등록   | POST   | `/books`           |                               |
+| 도서 정보 수정   | PUT    | `/books/:id`       |                               |
+| 도서 정보 삭제   | DELETE | `/books/:id`       |                               |
+| 도서 AI표지 갱신 | PATCH  | `/books/:id/cover` |                               |
+| 도서 정보 부분수정 | PATCH  | `/books/:id`       |                               |
 
 ---
 
 # 🔍 API 요청 / 응답 테스트 결과
 
-> 미션 3
+> API 명세 및 API 테스트는 Swagger-UI를 통해 쉽고 간편하게 확인 가능하도록 했습니다. 서버 실행 후 아래 링크로 접속하여 확인 가능합니다.
+> http://localhost:8080/swagger-ui/index.html
 
 ## 1. 도서 등록
 
@@ -95,42 +96,6 @@ POST /books
 ```
 
 ![POST /books](src/main/resources/screenshots/swagger/post_books.png)
-
-### 잘못된 요청 - 필수 필드 공란
-#### Request
-
-```http
-POST /books
-```
-
-- content 공란
-```json
-{
-  "id": "",
-  "title": "흥부와 놀부",
-  "author": "저자미상",
-  "content": "",
-  "coverImageUrl": "",
-  "category": "소설",
-  "createdAt": "2026-06-01T12:34:56.789Z",
-  "updatedAt": "2026-06-01T12:34:56.789Z"
-}
-```
-
-#### Response
-
-```http
-400 Bad Request
-```
-
-```json
-{
-  "status": 400,
-  "message": "content: 공백일 수 없습니다"
-}
-```
-
-![POST /books (내용 공란)](src/main/resources/screenshots/swagger/post_books_blankcontent.png)
 
 ## 2. 도서 목록 조회
 
@@ -206,27 +171,6 @@ GET /books/1
 
 ![GET /books/1](src/main/resources/screenshots/swagger/get_books_1.png)
 
-### 잘못된 요청 - id 유효하지 않음
-#### Request
-- 999번 도서 호출 (999번 도서 없음)
-```http
-GET /books/999
-```
-
-#### Response
-```http
-404 Not Found
-```
-
-```json
-{
-  "status": 404,
-  "message": "Book not found with id: 999"
-}
-```
-
-![GET /books/999](src/main/resources/screenshots/swagger/get_books_999.png)
-
 ---
 
 ## 4. 도서 수정
@@ -274,61 +218,6 @@ PUT /books/1
 
 ![PUT /books/1](src/main/resources/screenshots/swagger/put_books_1.png)
 
-### 잘못된 요청 - id 유효하지 않음
-#### Request
-- 999번 도서 호출 (999번 도서 없음)
-```http
-PUT /books/999
-```
-
-#### Response
-
-```http
-404 Not Found
-```
-
-```json
-{
-  "status": 404,
-  "message": "Book not found with id: 999"
-}
-```
-
-![PUT /books/999](src/main/resources/screenshots/swagger/put_books_999.png)
-
-### 잘못된 요청 - 필수 필드 공란
-#### Request
-```http
-PUT /books/1
-```
-
-```json
-{
-  "title": "클린 코드(개정판)",
-  "author": "로버트 C. 마틴",
-  "content": "",
-  "coverImageUrl": "",
-  "category": "IT/디지털",
-  "createdAt": "2026-05-26T15:45:00.000Z",
-  "updatedAt": "2026-05-26T15:45:00.000Z"
-}
-```
-
-#### Response
-
-```http
-400 Bad Request
-```
-
-```json
-{
-  "status": 400,
-  "message": "content: 공백일 수 없습니다"
-}
-```
-
-이미지 추가 예정 (DTO적용 후)
-
 ---
 
 ## 5. 도서 삭제
@@ -344,43 +233,87 @@ DELETE /books/1
 204 No Content
 ```
 
-![img.png](src/main/resources/screenshots/swagger/delete_books_1.png)
+![DELETE /books/1](src/main/resources/screenshots/swagger/delete_books_1.png)
 
 ---
 
 ## 6. 도서 AI커버이미지 수정
 
-TBD
+### Request
+
+```http
+PATCH /books/1/cover
+```
+
+```json
+{
+  "coverImageUrl": "newString"
+}
+```
+
+### Response
+
+```http
+200 OK
+```
+
+#### Request Body
+```json
+{
+  "id": 1,
+  "title": "string",
+  "author": "string",
+  "content": "string",
+  "coverImageUrl": "newString",
+  "category": "string",
+  "createdAt": "string",
+  "updatedAt": "string"
+}
+```
+
+![PATCH /books/1/cover](src/main/resources/screenshots/swagger/patch_books_1_cover.png)
 
 ---
 
 ## 7. 도서 부분수정
 
-TBD
+### Request
+
+```http
+PATCH /books/1
+```
+
+#### Request Body
+```json
+{
+  "title": "revised1",
+  "author": "revised2",
+  "updatedAt": "updatedTime"
+}
+```
+
+### Response
+```http
+200 OK
+```
+
+#### Response Body
+```json
+{
+  "id": 1,
+  "title": "revised1",
+  "author": "revised2",
+  "content": "string",
+  "coverImageUrl": "string",
+  "category": "string",
+  "createdAt": "string",
+  "updatedAt": "updatedTime"
+}
+```
+
+![PATCH /books/1](src/main/resources/screenshots/swagger/patch_books_1.png)
 
 ---
-
-# 👥 Team R&R
-## 운영 R&R
-- 조장: 박지연
-- 서기: 김종현
-- 발표자: 김현성
-
-## 기술 R&R
-- PM: 김현성, 차태의
-  - ERD / API 정의서, README.md 작성, 발표자료 준비, 통합 이슈 추적
-- 백엔드 개발(1): 김민우
-  - Book Entity 작성, BookRepository, H2 콘솔 확인, Lombok 4종 적용
-- 백엔드 개발(2): 오채은
-  - BookService 클래스, 비즈니스 로직, BookNotFoundException, `@Transactional`
-- 백엔드 개발(3): 윤한아
-  - BookController, 5종 CRUD 엔드포인트, `@Valid` + `@NotBlank`, Postman 테스트
-- 통합 / 예외처리: 김종현
-  - WebConfig(CORS), GlobalExceptionHandler, 풀스택 디버깅, 트러블슈팅 정리
-- AI / Frontend 연동: 박지연
-  - Frontend 코드 분석, fetch URL 변경 / 1차 연동, OpenAI 표지 흐름, E2E 시연 준비
-
-
 # 📚 Frontend-Backend 연동
 
 ---
@@ -450,36 +383,69 @@ GET /books (삭제 후 도서목록 새로고침)
 
 ### Title 누락
 Swagger
-![400_swagger_title.png](400_swagger_title.png)
+![400_swagger_title.png](src/main/resources/screenshots/react/400_swagger_title.png)
 
 Frontend
-![400_titlenull.png](400_titlenull.png)
+![400_titlenull.png](src/main/resources/screenshots/react/400_titlenull.png)
 
 ### Author 누락
 Swagger
-![400_swagger_author.png](400_swagger_author.png)
+![400_swagger_author.png](src/main/resources/screenshots/react/400_swagger_author.png)
 
 Frontend
-![400_authornull.png](400_authornull.png)
+![400_authornull.png](src/main/resources/screenshots/react/400_authornull.png)
 
 
 ### Content 누락
 Swagger
-![400_swagger_content.png](400_swagger_content.png)
+![400_swagger_content.png](src/main/resources/screenshots/react/400_swagger_content.png)
 
 Frontend
-![400_frontend.png](400_frontend.png)
+![400_frontend.png](src/main/resources/screenshots/react/400_frontend.png)
 
 ### Category 누락
 Swagger
-![400_swagger_category.png](400_swagger_category.png)
+![400_swagger_category.png](src/main/resources/screenshots/react/400_swagger_category.png)
 
 Frontend
-![400_categorynull.png](400_categorynull.png)
+![400_categorynull.png](src/main/resources/screenshots/react/400_categorynull.png)
 
 ## 404 Not Found
 Swagger -> 유효하지 않은 id
-![404_swagger.png](404_swagger.png)
+![404_swagger.png](src/main/resources/screenshots/react/404_swagger.png)
 
 Frontend
-![404_forntend.png](404_frontend.png)
+![404_forntend.png](src/main/resources/screenshots/react/404_frontend.png)
+
+# 👥 Team R&R
+## 운영 R&R
+- 조장: 박지연
+- 서기: 김종현
+- 발표자: 김현성
+
+## 기술 R&R
+- PM: 김현성, 차태의
+  - ERD / API 정의서, README.md 작성, 발표자료 준비, 통합 이슈 추적
+- 백엔드 개발(1): 김민우
+  - Book Entity 작성, BookRepository, H2 콘솔 확인, Lombok 4종 적용
+- 백엔드 개발(2): 오채은
+  - BookService 클래스, 비즈니스 로직, BookNotFoundException, `@Transactional`
+- 백엔드 개발(3): 윤한아
+  - BookController, 5종 CRUD 엔드포인트, `@Valid` + `@NotBlank`, Postman 테스트
+- 통합 / 예외처리: 김종현
+  - WebConfig(CORS), GlobalExceptionHandler, 풀스택 디버깅, 트러블슈팅 정리
+- AI / Frontend 연동: 박지연
+  - Frontend 코드 분석, fetch URL 변경 / 1차 연동, OpenAI 표지 흐름, E2E 시연 준비
+
+
+# 트러블 슈팅
+
+> 이번 프로젝트의 백엔드 및 풀스택 연동 과정에서는 시스템 안정성과 데이터 무결성을 확보하기 위해 세 가지 핵심적인 기술 의사결정을 수행했습니다. 우선, API 호출 결과로 204 No Content가 반환될 때 발생할 수 있는 데이터 문제를 방지하기 위해 프론트엔드와 성공 상태에 따른 분기 처리 로직을 규격화하였으며, 기존의 혼재된 수정 방식을 PUT 메서드로 단일화하여 코드 복잡도를 낮췄습니다.
+> 또한, 외부 의존성이었던 JSON Server를 제거하고 우리가 직접 구축한 Spring Boot 백엔드로 API 엔드포인트를 완전히 이전하여 데이터의 독립적인 제어권을 확보하였습니다. 이 과정에서 프론트엔드와 백엔드 간의 통신 규격을 명확히 정립하고, AI 표지 생성이라는 비즈니스 로직을 효율적으로 배치함으로써, 안정적인 아키텍처 위에서 사용자 중심의 방어적 UX를 구현하는 완성도 높은 풀스택 시스템을 구축할 수 있었습니다.
+
+# 회고
+
+> 이번 미니 프로젝트는 단순한 기능 구현을 넘어, 원활한 풀스택 협업과 견고한 백엔드 아키텍처 설계에 대해 깊이 고민하고 성장할 수 있었던 소중한 경험이었습니다. 특히 프론트엔드와의 원활한 소통을 위해 Swagger를 도입하였습니다. 이를 통해 API 명세를 동기화하고 즉각적인 테스트 환경까지 제공함으로써 협업 효율을 획기적으로 끌어올리며 해결할 수 있었습니다.
+> 또한, 도서 정보 수정 시 PATCH 대신 PUT을 채택하는 결정을 통해 데이터의 무결성을 지켜내는 API 표준화의 중요성을 체감했습니다. 무엇보다 Service와 Controller 계층 간의 결합도를 낮추기 위해 역할을 명확히 분리하며 데이터의 흐름을 체계화하였습니다.
+> 이에 더해 @RestControllerAdvice를 활용한 전역 예외 처리를 구현했습니다. 이를 통해 서버의 내부 비즈니스 로직을 안전하게 지키며 프론트엔드와 최종 사용자에게 일관되고 직관적인 UX 피드백을 제공할 수 있었습니다.
+> 결론적으로 단순한 서버 안정성 확보를 넘어 사용자 중심의 에러 핸들링과 UX 개선 역량을 한 단계 발전시키는 뜻 깊은 계기가 되었습니다.
