@@ -8,6 +8,82 @@
 
 ---
 
+# 🛠️ 기술 구조
+
+## 기술 스택
+
+| 구분             | 기술                                                                 |
+|----------------|--------------------------------------------------------------------|
+| Language       | Java 17                                                            |
+| Framework      | Spring Boot 4.0.6 (Spring Web MVC)                                 |
+| Persistence    | Spring Data JPA, Hibernate                                         |
+| Database       | H2 (In-Memory, `jdbc:h2:mem:bookdb`)                               |
+| Validation     | Spring Boot Starter Validation (`@Valid`, `@NotBlank`)            |
+| API Docs       | SpringDoc OpenAPI (Swagger UI)                                     |
+| Productivity   | Lombok, Spring Boot DevTools                                       |
+| Build Tool     | Gradle                                                             |
+| AI             | OpenAI GPT Image (도서 표지 자동 생성)                                |
+
+## 레이어드 아키텍처
+
+본 프로젝트는 관심사 분리를 위해 계층형(Layered) 아키텍처로 설계되었습니다.
+
+```text
+Client (React)
+      │  HTTP / JSON
+      ▼
+┌─────────────────────────────────────────────┐
+│  Controller   (BookController)               │  ← REST 엔드포인트, 요청/응답 매핑, @Valid 검증
+├─────────────────────────────────────────────┤
+│  Service      (BookService)                  │  ← 비즈니스 로직, @Transactional
+├─────────────────────────────────────────────┤
+│  Repository   (BookRepository)               │  ← Spring Data JPA, 데이터 접근
+├─────────────────────────────────────────────┤
+│  Domain       (Book Entity)                  │  ← JPA 엔티티, 도메인 모델
+└─────────────────────────────────────────────┘
+      │
+      ▼
+   H2 Database (In-Memory)
+
+전역 처리
+ - WebConfig             : CORS 설정
+ - GlobalExceptionHandler: @RestControllerAdvice 기반 전역 예외 처리
+ - DTO / Command         : 계층 간 데이터 전달 및 요청·응답 분리
+```
+
+## 프로젝트 구조
+
+```text
+src/main/java/com/aivle/bookapp
+├── BookappApplication.java          # 애플리케이션 진입점
+├── config
+│   └── WebConfig.java               # CORS 등 웹 설정
+├── controller
+│   └── BookController.java          # REST API 엔드포인트
+├── service
+│   └── BookService.java             # 비즈니스 로직
+├── repository
+│   └── BookRepository.java          # JPA 데이터 접근 계층
+├── domain
+│   └── Book.java                    # JPA 엔티티
+├── dto                              # 요청/응답 및 Command 객체
+│   ├── BookDto.java
+│   ├── BookResponse.java
+│   ├── CreateBookCommand.java
+│   ├── UpdateBookCommand.java
+│   ├── UpdateBookCoverImageUrlCommand.java
+│   ├── PostBookRequest.java
+│   ├── PutBookRequest.java
+│   ├── PatchBookRequest.java
+│   └── PatchBookCoverImageUrlRequest.java
+└── exception                        # 예외 처리
+    ├── BookNotFoundException.java
+    ├── ErrorResponse.java
+    └── GlobalExceptionHandler.java
+```
+
+---
+
 # 📊 데이터 모델 정의
 
 | 필드명             | 데이터 타입 | 설명                  |
@@ -381,6 +457,9 @@ GET /books (삭제 후 도서목록 새로고침)
 
 ## 400 Bad Request
 
+FE 공통 400번대 에러 처리
+![img.png](src/main/resources/screenshots/react/400_fall.png)
+
 ### Title 누락
 Swagger
 ![400_swagger_title.png](src/main/resources/screenshots/react/400_swagger_title.png)
@@ -415,7 +494,12 @@ Swagger -> 유효하지 않은 id
 ![404_swagger.png](src/main/resources/screenshots/react/404_swagger.png)
 
 Frontend
-![404_forntend.png](src/main/resources/screenshots/react/404_frontend.png)
+![404_fe.png](src/main/resources/screenshots/react/404_fe.png)
+
+## 500 서버에러 + 서버미응답
+
+Frontend
+![img.png](src/main/resources/screenshots/react/500.png)
 
 # 👥 Team R&R
 ## 운영 R&R
